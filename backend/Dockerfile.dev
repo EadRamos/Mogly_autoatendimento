@@ -1,0 +1,33 @@
+FROM php:8.2-fpm
+
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    libicu-dev
+
+RUN docker-php-ext-install -j$(nproc) intl pdo pdo_mysql zip
+
+RUN apt-get update && apt-get install -y autoconf
+
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+COPY . /var/www/html
+
+#RUN php artisan migrate --force
+
+RUN composer install --ignore-platform-reqs
+
+# Otimização para desenvolvimento (pode ser removido em produção)
+#RUN php artisan optimize:clear
+#RUN php artisan config:cache
+#RUN php artisan route:cache
+#RUN php artisan view:cache
+
+EXPOSE 8000
+#CMD ["php artisan serve --host=0.0.0.0 --port=8000"]

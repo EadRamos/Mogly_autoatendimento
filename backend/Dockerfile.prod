@@ -1,0 +1,27 @@
+FROM php:8.2-fpm
+
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    libicu-dev
+
+RUN docker-php-ext-install -j$(nproc) intl pdo pdo_mysql zip
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+COPY . /var/www/html
+
+RUN composer install --optimize-autoloader --no-dev --ignore-platform-reqs
+
+RUN php artisan migrate --force
+RUN php artisan optimize:clear
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+
+EXPOSE 9000
+CMD ["php-fpm"]

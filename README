@@ -1,0 +1,13 @@
+MOGLY - Aplicação de autoatendimento e cardápio digital para restaurantes
+
+O intuido da aplicação é presta serviço para simplificar e otimizar os processos entre restaurante e cliente, oferecendo serviços como pedidos em tempo real, gerencia de pedidos na cozinho e garçons, pagamento facilitado entre outros.
+
+Preve documentação de inicialização
+
+- Tenha o docker instalado na maquina
+- Clone o repositorio
+- Crie a pasta ( data_base ) na raiz do projeto
+- Abra o terminal na pasta raiz e rode o comando ``` docker-compose -f docker-compose.dev.yml up -d ```
+- Acesse http://localhost:80
+
+Há um arquivo compose para o desenvolvimento e outro para produção, em desenvolvimento é importante manter o compose.prod sempre atualizado com novas alterações.
